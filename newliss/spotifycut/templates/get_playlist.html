@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Webpage</title>
+</head>
+<body>
+    <ul id="navigation">
+    {% for item in playlists['items'] %}
+        {% set name = item['name'] %}
+        <!--<li>{{ track['name'] + ' - ' + track['artists'][0]['name'] }}</li> -->
+        <li>{{ name }}</li>
+    {% endfor %}
+    </ul>
+
+    <h1>My Webpage</h1>
+    <!-- {{ a_variable }} -->
+
+    <!-- {# a comment #} -->
+</body>
+</html>

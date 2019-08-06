@@ -1,0 +1,15 @@
+{
+  "name": "pokemon_info",
+  "version": "1.0.0",
+  "description": "use of pokemon_api",
+  "main": "get_pokemon.js",
+  "dependencies": {
+    "axiom": "^0.1.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mohan Foh",
+  "license": "ISC"
+}
