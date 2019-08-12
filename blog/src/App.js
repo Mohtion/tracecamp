@@ -1,12 +1,19 @@
 import React from 'react';
 //import logo from './logo.svg';
 import './App.css';
-import Blog from './components/blog'
+//import Blog from './components/blog'
+import BlogPost from './components/blog';
 
 function App() {
+  //let New_post = new Blog_post('', '');
+  //ReactDOM.render(
+    //<Blog_post />,Mihoy min yoy
+    //document.getElementById('root')
+  //);
   return (
+    //New_post.render()
     <div className="App">
-      <Blog />
+      <BlogPost />
     </div>
   );
 }
