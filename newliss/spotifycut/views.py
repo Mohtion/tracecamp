@@ -6,41 +6,82 @@ import requests
 import spotipy
 from spotipy import oauth2
 import spotipy.util as util
-# Create your views here.
+username = 'Mohtendo64'
+scope = """playlist-read-private,
+    playlist-read-collaborative,
+    playlist-modify-private, 
+    playlist-modify-public"""
+CLIENT_ID = '014b962707594a218d30b5e0052143eb'
+CLIENT_SECRET = '94f66f7a35c44ed589d063cf6abefb74'
+REDIRECT_URI = 'http://127.0.0.1:8000/spotifycut/callback'
+CACHE = './'
 
 #this login function is just a test
-class my_views():
-    @api_view()
-    def login(request):
-        username = 'Mohtendo64'
-        scope = 'user-library-read'
-        return util.prompt_for_user_token(
-            username, 
-            scope, 
-            client_id='014b962707594a218d30b5e0052143eb',
-            client_secret='94f66f7a35c44ed589d063cf6abefb74',
-            redirect_uri='http://127.0.0.1:8000/spotifycut/callback'
-        )
+def login(request):
+    """
+    token = util.prompt_for_user_token(
+        username, 
+        scope, 
+        CLIENT_ID,
+        CLIENT_SECRET,
+        REDIRECT_URI,
+        #CACHE
+    )"""
+    return oauth2.SpotifyOAuth(
+        CLIENT_ID, 
+        CLIENT_SECRET, 
+        REDIRECT_URI,
+        CACHE
+    )
+    print("this is the token we get back:",)
 
-    @api_view(['GET', 'POST'])
-    def callback(request):
-        code = request.GET.get('code')
-        auth = oauth2.SpotifyOAuth(client_id='014b962707594a218d30b5e0052143eb', client_secret='94f66f7a35c44ed589d063cf6abefb74', redirect_uri='http://127.0.0.1:8000/spotifycut/callback')
-        return Response(auth.get_access_token(code))
-    #get the user playlists and let them choose which one to cut
-    @api_view()    
-    def index(request):
-        token = request.GET.get('access_token')
-        sp = spotipy.Spotify(token)
-        playlists = sp.current_user_playlists()
-        return render(request, 'get_playlist.html', {'playlists': playlists})
+#The callback page
+def callback(request):
+
+    print("we are at calllback")
+    code = request.GET.get('code')
+    """auth = oauth2.SpotifyOAuth(
+        CLIENT_ID, 
+        CLIENT_SECRET, 
+        REDIRECT_URI,
+        CACHE
+    )
+    
+    token auth.get_access_token(code)['access_token']
+    """
+    #request.POST(access_token)
+    return index(request, token)
+    #render(request, template_name = 'example_track.html', context = {"tracks": results["tracks"]})
+
+#get the user playlists and let them choose which one to cut    
+def index(request, token):
+    """auth = oauth2.SpotifyOAuth(
+        CLIENT_ID,
+        CLIENT_SECRET, 
+        REDIRECT_URI,
+        CACHE
+    )"""
+    print("token:", token)
+    spotify = spotipy.Spotify(username, token)
+    #print("this is the cached token: ", auth.get_cached_token()  )
+    lz_uri = 'spotify:artist:36QJpDe2go2KgaRleHCDTp'
+    #print("This is the cached token: ", auth.get_cached_token()
+    results = spotify.artist_top_tracks(lz_uri)
+
+    for track in results['tracks'][:10]:
+        print( 'track    : ' + track['name'])
+        print( 'audio    : ' + track['preview_url'])
+        print( 'cover art: ' + track['album']['images'][0]['url'])
+
+    playlists = spotify.current_user_playlists()
+    return render(request, 'get_playlist.html', {'playlists': playlists})
 
 
 
 """def post_update(request):
     credentials = SpotifyClientCredentials(
-            client_id='014b962707594a218d30b5e0052143eb',
-            client_secret='94f66f7a35c44ed589d063cf6abefb74')
+            CLIENT_ID='014b962707594a218d30b5e0052143eb',
+            CLIENT_SECRET='94f66f7a35c44ed589d063cf6abefb74')
 
     token = credentials.get_access_token()
     #sp = spotipy.Spotify(auth=token)

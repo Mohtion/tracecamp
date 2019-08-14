@@ -1,0 +1,7 @@
+{% for track in tracks %}
+
+{{track.name}}
+<img src = "{{track.album.images.0.url}}"/>
+<br />
+
+{% endfor %}
